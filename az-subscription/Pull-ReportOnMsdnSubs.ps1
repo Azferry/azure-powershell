@@ -20,7 +20,7 @@
 
 
 Connect-AzAccount -Environment AzureCloud
-$CSV_FileName = "MsdnSubscriptions.csv"
+$CSV_FileName = "AzSubscriptions.csv"
 
 $tenantId = (Get-AzContext).Tenant.Id
 

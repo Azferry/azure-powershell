@@ -4,6 +4,3 @@
 
 # Exclude .NET assemblies from source
 *.dll
-
-# Exclude CSV 
-*.csv
