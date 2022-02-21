@@ -19,13 +19,44 @@
 #>
 
 
-Connect-AzAccount -Environment AzureCloud
+# Connect-AzAccount -Environment AzureCloud -Tenant "3ce2effc-ffcd-47fc-b417-e687def644b5"
 $CSV_FileName = "AzSubscriptions.csv"
 
-$tenantId = (Get-AzContext).Tenant.Id
+$MgList = Get-AzManagementGroup
+$MgSubList = @()
 
-$SubList = Get-AzSubscription | select * | ? {$_.SubscriptionPolicies.QuotaId -like "MSDN*"}
+foreach($m in $MgList){
+  $tenantRootSubscriptions = ((Get-AzManagementGroup -GroupId $m.Name -Expand -Recurse).Children | Where-Object {$_.Type -match 'subscriptions'}) | Select-Object -Property Name, DisplayName, Id
+  foreach($i in $tenantRootSubscriptions) {
+    $SubObject = [PSCustomObject]@{
+      ManagementGroup = $m.DisplayName
+      ManagementGroupId = $m.Id
+      SubscriptionId = $i.Name
+      SubscriptionDisplayName = $i.DisplayName
+      }
+    $MgSubList += $SubObject
+  }
+}
 
-$MsdnSubs = $SubList | Select Name, State, SubscriptionId, TenantId,HomeTenantId, SubscriptionPolicies
+$SubReportList = @()
+$SubList = (Get-AzSubscription | Select-Object * | ? {$_.SubscriptionPolicies.QuotaId -like "MSDN*"}) | Select-Object Name, State, SubscriptionId, TenantId, HomeTenantId, SubscriptionPolicies
 
-$MsdnSubs | Export-Csv -Path .\$CSV_FileName -NoTypeInformation
+foreach($sub in $SubList){
+  $Mg = $MgSubList | Where-Object -FilterScript {$_.SubscriptionId -EQ $sub.SubscriptionId}
+  $Policies = $sub.SubscriptionPolicies | ConvertFrom-Json 
+
+  $S = [PSCustomObject]@{
+    Name = $sub.Name
+    State = $sub.State
+    SubscriptionId = $sub.SubscriptionId
+    TenantId = $sub.TenantId
+    HomeTenantId = $sub.HomeTenantId
+    QuoteID = $Policies.QuotaId
+    SpendingLimit = $Policies.SpendingLimit
+    ManagementGroup = $Mg.ManagementGroup
+    ManagementGroupId = $Mg.ManagementGroupId
+  }
+  $SubReportList += $S
+}
+
+$SubReportList | Export-Csv -Path .\$CSV_FileName -NoTypeInformation
