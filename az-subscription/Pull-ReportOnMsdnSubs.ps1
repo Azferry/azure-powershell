@@ -15,18 +15,21 @@
   Purpose/Change: Initial script development
   
 .EXAMPLE
-  <Example goes here. Repeat this attribute for more than one example>
+  .\Pull-ReportOnMsdnSubs.ps1
 #>
 
 
-# Connect-AzAccount -Environment AzureCloud -Tenant "3ce2effc-ffcd-47fc-b417-e687def644b5"
+Connect-AzAccount -Environment AzureCloud 
 $CSV_FileName = "AzSubscriptions.csv"
 
 $MgList = Get-AzManagementGroup
 $MgSubList = @()
 
 foreach($m in $MgList){
-  $tenantRootSubscriptions = ((Get-AzManagementGroup -GroupId $m.Name -Expand -Recurse).Children | Where-Object {$_.Type -match 'subscriptions'}) | Select-Object -Property Name, DisplayName, Id
+  $tenantRootSubscriptions = ((Get-AzManagementGroup -GroupId $m.Name -Expand -Recurse).Children | `
+      Where-Object {$_.Type -match 'subscriptions'}) | `
+      Select-Object -Property Name, DisplayName, Id
+
   foreach($i in $tenantRootSubscriptions) {
     $SubObject = [PSCustomObject]@{
       ManagementGroup = $m.DisplayName
@@ -39,7 +42,9 @@ foreach($m in $MgList){
 }
 
 $SubReportList = @()
-$SubList = (Get-AzSubscription | Select-Object * | ? {$_.SubscriptionPolicies.QuotaId -like "MSDN*"}) | Select-Object Name, State, SubscriptionId, TenantId, HomeTenantId, SubscriptionPolicies
+$SubList = (Get-AzSubscription | Select-Object * | `
+    ? {$_.SubscriptionPolicies.QuotaId -like "MSDN*"}) | `
+    Select-Object Name, State, SubscriptionId, TenantId, HomeTenantId, SubscriptionPolicies
 
 foreach($sub in $SubList){
   $Mg = $MgSubList | Where-Object -FilterScript {$_.SubscriptionId -EQ $sub.SubscriptionId}
