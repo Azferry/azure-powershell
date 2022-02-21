@@ -11,8 +11,11 @@
 .PARAMETER WhatIf
   True or False to allow the user to see what changes will be made in the environment 
 .NOTES
-  Required premissions: Owner on the child subscriptions, Owner/Contributor/MG Contributor
-  on the target and destination management groups
+  Pre-requirements:
+    - Required premissions: Owner on the child subscriptions, Owner/Contributor/MG Contributor
+      on the target and destination management groups
+    - Recommended to review Azure Policy that is applied to the management groups before moving the subscriptions
+  Offer types are listed here: https://azure.microsoft.com/en-us/support/legal/offer-details/
 .NOTES
   Version:        1.0
   Creation Date:  2/17/22
@@ -42,12 +45,10 @@ Param (
 [Parameter(Mandatory=$false)][bool]$WhatIf = $false
 )
 
-
-# Connect-AzAccount 
-# $DestinationManagementGroupId = "MyGroup"
+Connect-AzAccount 
 
 try {
-  $SubList = Import-CSV -Path ..\AzSubscriptions.csv
+  $SubList = Import-CSV -Path $CSVPath
   Write-Host "CSV Imported" -ForegroundColor Green
   Write-Host ((($SubList).Count).ToString() + " Subscriptions are going to be moved") 
 
@@ -56,11 +57,6 @@ try {
   if (($response -ne "Y") -or ($response -ne "y")) { 
     Write-Host "Exit"
     exit 
-  }
-
-  ## Check if MG Group Exists
-  if(!get-azmanagementgroup -GroupId $DestinationManagementGroupId ){
-    Write-Host "HI"
   }
 
   foreach ($sub in $SubList){
