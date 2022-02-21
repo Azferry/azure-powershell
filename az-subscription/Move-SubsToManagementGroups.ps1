@@ -4,8 +4,8 @@
   Move subscriptions to the desired management group 
 .DESCRIPTION
   From a CSV List of subscriptions move each one to the destination management group 
-.PARAMETER DestinationManagementGroupName
-  Name of the management group the subscriptions will be moved to 
+.PARAMETER DestinationManagementGroupId
+  ID of the management group the subscriptions will be moved to 
 .PARAMETER CSVPath
   Path to the CSV input file. CSV can be generatred with Pull-ReportOnMsdnSubs.ps1
 .PARAMETER WhatIf
@@ -28,36 +28,49 @@
   (iii) to indemnify, hold harmless, and defend Us and Our suppliers from and against any claims or lawsuits, including attorneys' fees, that arise or result from the use or distribution of the Sample Code.
   This posting is provided "AS IS" with no warranties, and confers no rights.
 .EXAMPLE
-  Run script 
-  .\Move-SubsToManagementGroups.ps1 -DestinationManagementGroupName "ntc-lz-sbx" -CSVPath "..\AzSubscriptions.csv" 
+  Standard run of script 
+  .\Move-SubsToManagementGroups.ps1 -DestinationManagementGroupId "ntc-lz-sbx" -CSVPath "..\AzSubscriptions.csv" 
 .EXAMPLE
   Run script with What if allows you to check what will happen before running
-  .\Move-SubsToManagementGroups.ps1 -DestinationManagementGroupName "ntc-lz-sbx" -CSVPath "..\AzSubscriptions.csv"  -WhatIf $true
+  .\Move-SubsToManagementGroups.ps1 -DestinationManagementGroupId "ntc-lz-sbx" -CSVPath "..\AzSubscriptions.csv"  -WhatIf $true
 #>
 
 
 Param (
-[Parameter(Mandatory=$true)][string]$DestinationManagementGroupName,
+[Parameter(Mandatory=$true)][string]$DestinationManagementGroupId,
 [Parameter(Mandatory=$true)][string]$CSVPath,
 [Parameter(Mandatory=$false)][bool]$WhatIf = $false
 )
 
-Connect-AzAccount
+
+# Connect-AzAccount 
+# $DestinationManagementGroupId = "MyGroup"
 
 try {
   $SubList = Import-CSV -Path ..\AzSubscriptions.csv
   Write-Host "CSV Imported" -ForegroundColor Green
   Write-Host ((($SubList).Count).ToString() + " Subscriptions are going to be moved") 
-  Write-Warning "Move subscriptin List to management group?" -WarningAction Inquire
+
+  Write-Host -nonewline "Do you want to continue with the move? (Y/N) "
+  $response = Read-Host
+  if (($response -ne "Y") -or ($response -ne "y")) { 
+    Write-Host "Exit"
+    exit 
+  }
+
+  ## Check if MG Group Exists
+  if(!get-azmanagementgroup -GroupId $DestinationManagementGroupId ){
+    Write-Host "HI"
+  }
 
   foreach ($sub in $SubList){
     if($WhatIf){
-      New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupName -SubscriptionId $sub.SubscriptionId -WhatIf
-      Write-Host ("WhatIf - Move Sub: " + $sub.Name + " to Management group:  $DestinationManagementGroupName") -ForegroundColor Yellow
+      New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupId -SubscriptionId $sub.SubscriptionId -WhatIf
+      Write-Host ("WhatIf - Move Sub: " + $sub.Name + " to Management group:  $DestinationManagementGroupId") -ForegroundColor Yellow
     }
     else {
-      New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupName -SubscriptionId $sub.SubscriptionId 
-      Write-Host ("Move Sub: " + $sub.Name + " to Management group:  $DestinationManagementGroupName") -ForegroundColor Green
+      New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupId -SubscriptionId $sub.SubscriptionId 
+      Write-Host ("Move Sub: " + $sub.Name + " to Management group:  $DestinationManagementGroupId") -ForegroundColor Green
     }
   }
  
