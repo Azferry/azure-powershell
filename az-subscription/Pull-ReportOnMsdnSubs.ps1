@@ -10,7 +10,7 @@
 .OUTPUTS
   Stores the CSV to the current running directory
 .NOTES
-  Version:        1.0
+  Version:        1.1
   Creation Date:  2/15/22
   Purpose/Change: Initial script development
   
@@ -19,11 +19,13 @@
 #>
 
 
-Connect-AzAccount -Environment AzureCloud 
+Connect-AzAccount -Environment AzureCloud
 $CSV_FileName = "AzSubscriptions.csv"
-
+$AzTenant = (Get-AzContext).Tenant.Id
 $MgList = Get-AzManagementGroup
 $MgSubList = @()
+$SubQuoteID = "MSDN*"
+$RoleID = "8e3af657-a8ff-443c-a75c-2fe8c4bcb635" ## Owner Role - Standard accross tenants 
 
 foreach($m in $MgList){
   $tenantRootSubscriptions = ((Get-AzManagementGroup -GroupId $m.Name -Expand -Recurse).Children | `
@@ -42,13 +44,20 @@ foreach($m in $MgList){
 }
 
 $SubReportList = @()
-$SubList = (Get-AzSubscription | Select-Object * | `
-    ? {$_.SubscriptionPolicies.QuotaId -like "MSDN*"}) | `
+    
+$SubList = (Get-AzSubscription -TenantId $AzTenant | Select-Object * | `
+    ? {$_.SubscriptionPolicies.QuotaId -like $SubQuoteID}) | `
     Select-Object Name, State, SubscriptionId, TenantId, HomeTenantId, SubscriptionPolicies
 
 foreach($sub in $SubList){
   $Mg = $MgSubList | Where-Object -FilterScript {$_.SubscriptionId -EQ $sub.SubscriptionId}
   $Policies = $sub.SubscriptionPolicies | ConvertFrom-Json 
+  $SubscriptionScope = "/subscriptions/" + $sub.SubscriptionId
+
+  $SubscriptionRbacAssignment = Get-AzRoleAssignment -RoleDefinitionId $RoleID -Scope $SubscriptionScope | `
+        Where-Object {($_.ObjectType -EQ "user") -and ($_.Scope -EQ $SubscriptionScope) } | `
+        Select-Object DisplayName, SignInName, RoleDefinitionName | `
+        ConvertTo-Json
 
   $S = [PSCustomObject]@{
     Name = $sub.Name
@@ -60,6 +69,7 @@ foreach($sub in $SubList){
     SpendingLimit = $Policies.SpendingLimit
     ManagementGroup = $Mg.ManagementGroup
     ManagementGroupId = $Mg.ManagementGroupId
+    SubscriptionOwners = $SubscriptionRbacAssignment
   }
   $SubReportList += $S
 }
