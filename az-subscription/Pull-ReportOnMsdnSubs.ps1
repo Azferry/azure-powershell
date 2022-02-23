@@ -47,11 +47,12 @@ $SubReportList = @()
     
 $SubList = (Get-AzSubscription -TenantId $AzTenant | Select-Object * | `
     ? {$_.SubscriptionPolicies.QuotaId -like $SubQuoteID}) | `
-    Select-Object Name, State, SubscriptionId, TenantId, HomeTenantId, SubscriptionPolicies
+    Select-Object Name, State, SubscriptionId, TenantId, HomeTenantId, SubscriptionPolicies, Tags
 
 foreach($sub in $SubList){
   $Mg = $MgSubList | Where-Object -FilterScript {$_.SubscriptionId -EQ $sub.SubscriptionId}
   $Policies = $sub.SubscriptionPolicies | ConvertFrom-Json 
+  $Tags = $sub.Tags | ConvertTo-Json 
   $SubscriptionScope = "/subscriptions/" + $sub.SubscriptionId
 
   $SubscriptionRbacAssignment = Get-AzRoleAssignment -RoleDefinitionId $RoleID -Scope $SubscriptionScope | `
@@ -70,6 +71,7 @@ foreach($sub in $SubList){
     ManagementGroup = $Mg.ManagementGroup
     ManagementGroupId = $Mg.ManagementGroupId
     SubscriptionOwners = $SubscriptionRbacAssignment
+    Tags = $Tags
   }
   $SubReportList += $S
 }
