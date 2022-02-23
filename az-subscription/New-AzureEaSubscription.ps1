@@ -43,12 +43,6 @@ Param (
 
 Connect-AzAccount 
 
-$WorkloadType = "DevTest"
-$BillingScope = ""
-$SubAlias = "NewAlias2"
-$SubscriptionName = "Subscription2"
-$DestinationManagementGroupId = ""
-
 
 if (Get-Module -ListAvailable -Name "Az.Subscription") {
   Write-Host "Module Already installed on the system"
