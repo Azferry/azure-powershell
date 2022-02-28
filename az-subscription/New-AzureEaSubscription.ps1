@@ -67,6 +67,6 @@ Write-Host "Waiting for subscription to show up" -ForegroundColor Green
 Start-Sleep -s 20
 
 ## Move the subscription to a management group
-$NewSubscription = Get-AzSubscription -subscriptionname azp-ntc-app-prd-01 | Select-Object *
+$NewSubscription = Get-AzSubscription -subscriptionname $SubscriptionName | Select-Object *
 New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupId -SubscriptionId $NewSubscription.Id  
 Write-Host ("Move Sub: " + $NewSubscription.Id  + " to Management group: $DestinationManagementGroupId") -ForegroundColor Green
