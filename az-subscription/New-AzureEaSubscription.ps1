@@ -21,9 +21,10 @@
 .LINK 
   https://github.com/Azferry/azure-powershell
 .NOTES
-  Version:        1.0
+  Version:        1.1
   Creation Date:  2/18/22
   Change: V1.0 - Initial script development
+          V1.1 - Mv subscription to mg group
 .EXAMPLE
   Create a Production Subscription 
   .\New-AzureEaSubscription.ps1 -DestinationManagementGroupId "ntc-lz-sbx" -SubscriptionName "Name" -SubAlias "Name" -BillingScope "/providers/Microsoft.Billing/BillingAccounts/1234567/enrollmentAccounts/7654321"
@@ -43,7 +44,7 @@ Param (
 
 Connect-AzAccount 
 
-
+## Module import / install
 if (Get-Module -ListAvailable -Name "Az.Subscription") {
   Write-Host "Module Already installed on the system"
 }
@@ -53,13 +54,19 @@ else {
 }
 Import-Module Az.Subscription
 
-
+## Create the subscription within the EA Agreement
+## https://docs.microsoft.com/en-us/powershell/module/az.subscription/get-azsubscriptionalias?view=azps-7.2.0
 $EaSub = New-AzSubscriptionAlias -AliasName $SubAlias `
       -SubscriptionName $SubscriptionName `
       -BillingScope $BillingScope `
       -Workload $WorkloadType
 
 Write-Host "New Subscription Created" -ForegroundColor Green
+Write-Host "Waiting for subscription to show up" -ForegroundColor Green
+## Wait for sub to be show in portal 
+Start-Sleep -s 20
 
-New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupId -SubscriptionId $EaSub.Id  
-Write-Host ("Move Sub: " + $EaSub.Id  + " to Management group:  $DestinationManagementGroupId") -ForegroundColor Green
+## Move the subscription to a management group
+$NewSubscription = Get-AzSubscription -subscriptionname azp-ntc-app-prd-01 | Select-Object *
+New-AzManagementGroupSubscription -GroupId $DestinationManagementGroupId -SubscriptionId $NewSubscription.Id  
+Write-Host ("Move Sub: " + $NewSubscription.Id  + " to Management group: $DestinationManagementGroupId") -ForegroundColor Green
