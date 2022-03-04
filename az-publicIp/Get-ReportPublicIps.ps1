@@ -15,9 +15,10 @@
 .INPUTS
   None
 .NOTES
-  Version:        1.0
+  Version:        1.1
   Creation Date:  2/25/22
   Change: V1.0 - Initial script development
+          V1.1 - Cleanup and fix csv export access issue
 .COMPONENT 
   Requires Module Az.Network
 .LINK 
@@ -27,7 +28,7 @@
   .\Get-ReportPublicIps.ps1 -ManagementGroup "ntc-lz-npd"
 .EXAMPLE
   Pull only detached Public IPs 
-  .\Get-ReportPublicIps.ps1 -ManagementGroup "ntc-lz-npd" -ManagementGroup $true
+  .\Get-ReportPublicIps.ps1 -ManagementGroup "ntc-lz-npd" -OnlyDetachedPip $true
 .EXAMPLE
   Pull only attached Public IPs 
   .\Get-ReportPublicIps.ps1 -ManagementGroup "ntc-lz-npd" -OnlyAttachedPip $true
@@ -53,14 +54,10 @@ else {
 }
 Import-Module Az.Network
 
-# Connect-AzAccount
+Connect-AzAccount
 
 
-# $ManagementGroup = "ntc-lz-npd"
-# $SubscriptionId = ""
-# $CSV_FileName = "AzPipReport.csv"
-# $OnlyAttachedPip = $false
-# $OnlyDetachedPip = $false
+$CSV_FileName = ".\PublicIpReport.csv"
 
 $SubscriptionList = @()
 if($ManagementGroup){
@@ -118,4 +115,4 @@ foreach($Subscription in $SubscriptionList){
   }
 }
 
-$PublicIpList | Export-Csv -Path .\$CSV_FileName -NoTypeInformation
+$PublicIpList | Export-Csv -Path $CSV_FileName -NoTypeInformation
