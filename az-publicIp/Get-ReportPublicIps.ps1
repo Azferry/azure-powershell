@@ -100,6 +100,7 @@ foreach($Subscription in $SubscriptionList){
     $PIPObject = [PSCustomObject]@{
       PipName = $Ip.Name
       VmName = $VmName
+      SubscriptionName = $Subscription.DisplayName
       ResourceGroupName = $Ip.ResourceGroupName
       PublicIpAllocationMethod = $Ip.PublicIpAllocationMethod
       IpAddress = $Ip.IpAddress
