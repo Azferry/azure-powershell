@@ -38,12 +38,12 @@
 #>
 
 
-Param (
-  [Parameter(Mandatory=$false)][string]$ManagementGroup,
-  [Parameter(Mandatory=$false)][string]$SubscriptionId,
-  [Parameter(Mandatory=$false)][bool]$OnlyAttachedPip = $false ,
-  [Parameter(Mandatory=$false)][bool]$OnlyDetachedPip = $false
-)
+# Param (
+#   [Parameter(Mandatory=$false)][string]$ManagementGroup,
+#   [Parameter(Mandatory=$false)][string]$SubscriptionId,
+#   [Parameter(Mandatory=$false)][bool]$OnlyAttachedPip = $false ,
+#   [Parameter(Mandatory=$false)][bool]$OnlyDetachedPip = $false
+# )
 
 if (Get-Module -ListAvailable -Name "Az.Network") {
   Write-Host "Module Already installed on the system"
@@ -84,7 +84,8 @@ foreach($Subscription in $SubscriptionList){
   
   foreach($Ip in $Piplist){
     $IPConfig = $Ip[0].IpConfiguration.id
-    if($IPConfig -ne $null){
+    if(($null -ne $IPConfig) -and ($IPConfig.Split("/")[7] -ne "networkInterfaces")){ break }
+    if($null -ne $IPConfig){
       $NetworkInterfaceName = $IPConfig.Split("/")[8]
       $NetworkInterfaceRG = $IPConfig.Split("/")[4]
       $Nic = Get-AzNetworkInterface -Name $NetworkInterfaceName -ResourceGroupName $NetworkInterfaceRG
@@ -105,8 +106,7 @@ foreach($Subscription in $SubscriptionList){
       PublicIpAllocationMethod = $Ip.PublicIpAllocationMethod
       IpAddress = $Ip.IpAddress
       PublicIpAddressVersion = $Ip.PublicIpAddressVersion
-      IpConfiguration = $Ip.IpConfiguration
-      Sku = $Ip.sku[0]
+      IpConfiguration = $Ip.IpConfiguration.Id
       PipId = $Ip.Id
       NicId = $Nic.Id
       VmId = $VmId
