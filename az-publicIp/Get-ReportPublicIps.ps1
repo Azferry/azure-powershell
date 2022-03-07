@@ -38,12 +38,12 @@
 #>
 
 
-# Param (
-#   [Parameter(Mandatory=$false)][string]$ManagementGroup,
-#   [Parameter(Mandatory=$false)][string]$SubscriptionId,
-#   [Parameter(Mandatory=$false)][bool]$OnlyAttachedPip = $false ,
-#   [Parameter(Mandatory=$false)][bool]$OnlyDetachedPip = $false
-# )
+Param (
+  [Parameter(Mandatory=$false)][string]$ManagementGroup,
+  [Parameter(Mandatory=$false)][string]$SubscriptionId,
+  [Parameter(Mandatory=$false)][bool]$OnlyAttachedPip = $false ,
+  [Parameter(Mandatory=$false)][bool]$OnlyDetachedPip = $false
+)
 
 if (Get-Module -ListAvailable -Name "Az.Network") {
   Write-Host "Module Already installed on the system"
