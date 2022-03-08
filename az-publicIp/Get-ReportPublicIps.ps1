@@ -54,7 +54,7 @@ else {
 }
 Import-Module Az.Network
 
-Connect-AzAccount
+# Connect-AzAccount
 
 
 $CSV_FileName = ".\PublicIpReport.csv"
@@ -83,14 +83,17 @@ foreach($Subscription in $SubscriptionList){
   }
   
   foreach($Ip in $Piplist){
+    # $Ip
     $IPConfig = $Ip[0].IpConfiguration.id
-    if(($null -ne $IPConfig) -and ($IPConfig.Split("/")[7] -ne "networkInterfaces")){ break }
     if($null -ne $IPConfig){
-      $NetworkInterfaceName = $IPConfig.Split("/")[8]
-      $NetworkInterfaceRG = $IPConfig.Split("/")[4]
-      $Nic = Get-AzNetworkInterface -Name $NetworkInterfaceName -ResourceGroupName $NetworkInterfaceRG
-      $VmId = $Nic[0].VirtualMachine.id
-      $VmName = $VmId.Split("/")[8]
+      $IPConfig
+      if($IPConfig.Split("/")[7] -ne "loadBalancers"){ 
+        $NetworkInterfaceName = $IPConfig.Split("/")[8]
+        $NetworkInterfaceRG = $IPConfig.Split("/")[4]
+        $Nic = Get-AzNetworkInterface -Name $NetworkInterfaceName -ResourceGroupName $NetworkInterfaceRG
+        $VmId = $Nic[0].VirtualMachine.id
+        $VmName = $VmId.Split("/")[8]
+      }
     }
     else {
       $Nic = $null
