@@ -86,14 +86,13 @@ foreach($Subscription in $SubscriptionList){
     # $Ip
     $IPConfig = $Ip[0].IpConfiguration.id
     if($null -ne $IPConfig){
+      # if($IPConfig.Split("/")[7] -eq "loadBalancers"){ break }
       $IPConfig
-      if($IPConfig.Split("/")[7] -ne "loadBalancers"){ 
-        $NetworkInterfaceName = $IPConfig.Split("/")[8]
-        $NetworkInterfaceRG = $IPConfig.Split("/")[4]
-        $Nic = Get-AzNetworkInterface -Name $NetworkInterfaceName -ResourceGroupName $NetworkInterfaceRG
-        $VmId = $Nic[0].VirtualMachine.id
-        $VmName = $VmId.Split("/")[8]
-      }
+      $NetworkInterfaceName = $IPConfig.Split("/")[8]
+      $NetworkInterfaceRG = $IPConfig.Split("/")[4]
+      $Nic = Get-AzNetworkInterface -Name $NetworkInterfaceName -ResourceGroupName $NetworkInterfaceRG
+      $VmId = $Nic[0].VirtualMachine.id
+      $VmName = $VmId.Split("/")[8]
     }
     else {
       $Nic = $null
