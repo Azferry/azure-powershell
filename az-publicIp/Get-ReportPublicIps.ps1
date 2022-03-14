@@ -99,13 +99,13 @@ foreach($Subscription in $SubscriptionList){
       $VmName = $null
     }
     
-    $SubID = $Subscription.Id.Split("/")[7]
+    $SubID = $Subscription.Id.Split("/")[2]
 
     $PIPObject = [PSCustomObject]@{
       PipName = $Ip.Name
       VmName = $VmName
       SubscriptionName = $Subscription.DisplayName
-      SubscriptionId = $Subscription.Id
+      SubscriptionId = $SubID 
       ResourceGroupName = $Ip.ResourceGroupName
       PublicIpAllocationMethod = $Ip.PublicIpAllocationMethod
       IpAddress = $Ip.IpAddress
