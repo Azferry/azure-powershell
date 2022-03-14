@@ -55,7 +55,7 @@ else {
 Import-Module Az.Subscription
 
 ## Create the subscription within the EA Agreement
-## https://docs.microsoft.com/en-us/powershell/module/az.subscription/get-azsubscriptionalias?view=azps-7.2.0
+## https://docs.microsoft.com/en-us/powershell/module/az.subscription/new-azsubscriptionalias?view=azps-7.2.0
 $EaSub = New-AzSubscriptionAlias -AliasName $SubAlias `
       -SubscriptionName $SubscriptionName `
       -BillingScope $BillingScope `
