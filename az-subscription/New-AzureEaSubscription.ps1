@@ -25,6 +25,10 @@
   Creation Date:  2/18/22
   Change: V1.0 - Initial script development
           V1.1 - Mv subscription to mg group
+.NOTES
+  There's a limit of 5000 subscriptions per enrollment account. After that, more subscriptions for the account can only be
+  created in the Azure portal. To create more subscriptions through the API, create another enrollment account. Canceled,
+  deleted, and transferred subscriptions count toward the 5000 limit.
 .EXAMPLE
   Create a Production Subscription 
   .\New-AzureEaSubscription.ps1 -DestinationManagementGroupId "ntc-lz-sbx" -SubscriptionName "Name" -SubAlias "Name" -BillingScope "/providers/Microsoft.Billing/BillingAccounts/1234567/enrollmentAccounts/7654321"

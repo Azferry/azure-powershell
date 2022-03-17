@@ -30,7 +30,7 @@
     (iii) to indemnify, hold harmless, and defend Us and Our suppliers from and against any claims or lawsuits, including attorneys' fees, that arise or result from the use or distribution of the Sample Code.
     This posting is provided "AS IS" with no warranties, and confers no rights.
 .COMPONENT 
-    Requires Module Az.Network
+    Requires Module Az.Network, Az.Accounts, Az
 .LINK 
     https://github.com/Azferry/azure-powershell
     https://docs.microsoft.com/en-us/azure/virtual-network/ip-services/remove-public-ip-address-vm#powershell
@@ -85,7 +85,7 @@ foreach ($Sub in $SubscriptionList ){
     $PipList = $PublicIpList | Where-Object {$_.SubscriptionId -eq $Sub}
     Set-AzContext -Subscription $Sub
 
-    ### Loop thorough each public IP
+    ### Loop through each public IP
     foreach ($Pip in $PipList){
         $P = Get-AzPublicIpAddress -Name $Pip.PipName -ResourceGroupName $Pip.ResourceGroupName
         ### If DetachPip == True or DetachPip and DeletePiP == True 
