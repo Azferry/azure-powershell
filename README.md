@@ -15,5 +15,13 @@ Collection of scripts for Azure
 
 ## Azure Automation Runbooks
 
+### Runbooks
+
 | Item | Description | File In Repository |
 | ---- | ----------- | ------------------ |
+
+### Example Powershell
+
+| Item | Description | File In Repository |
+| ---- | ----------- | ------------------ |
+|runbook-csvimport.ps1 | Shows how to upload and download csv files from storage account | [Script](/az-aa-runbooks/examples/runbook-csvimport.ps1) |
