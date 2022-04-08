@@ -70,6 +70,9 @@ https://dev.azure.com/{{Organization}}/{{ProjectName}}/_apis/pipelines/{{Pipelin
 Refrence: [Azure DevOps RestAPI](https://docs.microsoft.com/rest/api/azure/devops/pipelines/runs/run-pipeline?view=azure-devops-rest-6.0)
 
 #### Make the call from postman
-Authentication
-![ARM Control Plane](./../az-publicIp/azdevops-postman1.png)
 
+Under the Authentication tab set the auth type to Basic Auth and using the personal access token as the password. (Leaving the username blank.)
+![ARM Control Plane](./../az-publicIp/azdevops-postman2.png)
+
+Under the body tab set the type to raw and json. Paste the body of the request.
+![ARM Control Plane](./../az-publicIp/azdevops-postman1.png)
