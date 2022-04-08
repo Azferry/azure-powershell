@@ -4,13 +4,11 @@ Azure pipelines can be use to run as a host.
 
 ## Create the Pipeline
 
+<img src="./../az-publicIp/azdevops-newpipeline.png" alt="InfiniteGraph Logo" width="570" height="250">
+
 1. Create a new pipeline
-   ![Azure Devops New Pipeline](./../az-publicIp/azdevops-newpipeline.png)
    1. Select where the code is located (Azure Repo Git) > Select the repository
    2. Select Starter Pipeline
-   3. Set any env variables
-      1. ![Azure Devops variables](./../az-publicIp/azdevops-variables.png)
-      2. ![Azure Devops New variables](./../az-publicIp/azdevops-newvars.png)
 2. replace the yaml task
 
 ```ymal
@@ -47,7 +45,7 @@ Trigger from an external system to run a powershell script
 The personal access token (PAT) is used to authenticate when making the rest api call.
 
 1. Open the Azure DevOps Project > Personal access token
-   1. ![Azure Devops New PAT](./../az-publicIp/azdevops-pat1.png)
+   1. <img src="./../az-publicIp/azdevops-pat1.png" alt="InfiniteGraph Logo" width="220" height="220">
 2. Create a personal access token with permissions for build/release pipelines
 
 #### Rest API Call
@@ -77,3 +75,4 @@ Refrence: [Azure DevOps RestAPI](https://docs.microsoft.com/rest/api/azure/devop
 
 
 ### Trigger Via Logic Apps
+<img src="./../az-publicIp/azdevops-pat1.png" alt="InfiniteGraph Logo" width="220" height="220">
