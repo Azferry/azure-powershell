@@ -4,7 +4,7 @@ Azure pipelines can be use to run as a host.
 
 ## Create the Pipeline
 
-<img src="./../az-publicIp/azdevops-newpipeline.png" alt="InfiniteGraph Logo" width="570" height="250">
+<img src="./../img/azdevops-newpipeline.png" alt="InfiniteGraph Logo" width="570" height="250">
 
 1. Create a new pipeline
    1. Select where the code is located (Azure Repo Git) > Select the repository
@@ -45,7 +45,7 @@ Trigger from an external system to run a powershell script
 The personal access token (PAT) is used to authenticate when making the rest api call.
 
 1. Open the Azure DevOps Project > Personal access token
-   1. <img src="./../az-publicIp/azdevops-pat1.png" alt="InfiniteGraph Logo" width="300" height="400">
+   1. <img src="./../img/azdevops-pat1.png" alt="InfiniteGraph Logo" width="300" height="400">
 2. Create a personal access token with permissions for build/release pipelines
 
 #### Rest API Call
@@ -72,7 +72,7 @@ Refrence: [Azure DevOps RestAPI](https://docs.microsoft.com/rest/api/azure/devop
 #### Make the call from postman
 
 Under the Authentication tab set the auth type to Basic Auth and using the personal access token as the password. (Leaving the username blank.)
-![ARM Control Plane](./../az-publicIp/azdevops-postman2.png)
+![ARM Control Plane](./../img/azdevops-postman2.png)
 
 Under the body tab set the type to raw and json. Paste the body of the request.
-![ARM Control Plane](./../az-publicIp/azdevops-postman1.png)
+![ARM Control Plane](./../img/azdevops-postman1.png)
