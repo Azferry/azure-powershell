@@ -70,5 +70,6 @@ https://dev.azure.com/{{Organization}}/{{ProjectName}}/_apis/pipelines/{{Pipelin
 Refrence: [Azure DevOps RestAPI](https://docs.microsoft.com/rest/api/azure/devops/pipelines/runs/run-pipeline?view=azure-devops-rest-6.0)
 
 #### Make the call from postman
-
+Authentication
+<img src="./../az-publicIp/azdevops-postman1.png" alt="InfiniteGraph Logo" width="850" height="650">
 
