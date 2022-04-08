@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "559fc99c-eef2-4434-9bd4-4ea252ce1c1a",
+		"name": "Azure DevOps Example",
+		"description": "Authentication - Use an azure devops personal access token. Use the Basic Auth type leaving the username blank and paste the PAT in the password field.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Trigger Pipeline",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"definition\": {\r\n        \"id\": 13\r\n    },\r\n    \"templateParameters\": {\r\n        \"username\": \"Bob Smith\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev.azure.com/{{Organization}}/{{ProjectName}}/_apis/pipelines/13/runs?api-version=6.1-preview.1",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"azure",
+						"com"
+					],
+					"path": [
+						"{{Organization}}",
+						"{{ProjectName}}",
+						"_apis",
+						"pipelines",
+						"13",
+						"runs"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "6.1-preview.1"
+						}
+					]
+				},
+				"description": "[Microsoft RestAPI Azure DevOps](https://docs.microsoft.com/rest/api/azure/devops/pipelines/runs/run-pipeline?view=azure-devops-rest-6.0)"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Organization",
+			"value": "ORGNAME",
+			"type": "string"
+		},
+		{
+			"key": "ProjectName",
+			"value": "PROJECTNAME",
+			"type": "string"
+		}
+	]
+}
