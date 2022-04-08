@@ -45,7 +45,7 @@ Trigger from an external system to run a powershell script
 The personal access token (PAT) is used to authenticate when making the rest api call.
 
 1. Open the Azure DevOps Project > Personal access token
-   1. <img src="./../az-publicIp/azdevops-pat1.png" alt="InfiniteGraph Logo" width="250" height="500">
+   1. <img src="./../az-publicIp/azdevops-pat1.png" alt="InfiniteGraph Logo" width="300" height="400">
 2. Create a personal access token with permissions for build/release pipelines
 
 #### Rest API Call
