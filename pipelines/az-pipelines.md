@@ -71,5 +71,5 @@ Refrence: [Azure DevOps RestAPI](https://docs.microsoft.com/rest/api/azure/devop
 
 #### Make the call from postman
 Authentication
-<img src="./../az-publicIp/azdevops-postman1.png" alt="InfiniteGraph Logo" width="850" height="650">
+![ARM Control Plane](./../az-publicIp/azdevops-postman1.png)
 
