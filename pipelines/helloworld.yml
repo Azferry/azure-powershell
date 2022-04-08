@@ -1,0 +1,17 @@
+# Run a hello world powershell script and passing arguments into the script
+# Requirements - store the powershell script in an repository and set the env variable for NAME
+
+
+trigger:
+- main
+
+pool:
+  name: Azure Pipelines
+steps:
+- task: PowerShell@2
+  displayName: 'PowerShell Script'
+  inputs:
+    targetType: filePath
+    filePath: ./helloWorldPram.ps1
+    arguments: '-name ${env:NAME}'
+
