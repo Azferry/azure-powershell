@@ -19,6 +19,12 @@
             V1.1 - Loop over subscriptions
 .NOTES 
     IMPORTANT - When a public IP is deleted the address is released and unrecoverable. 
+    Intended Process 
+        1. Run the Get-ReportPublicIps.ps1 - this will generate a csv report of public ips that will be removed
+        2. Review the CSV for ips that should not be removed 
+        3. Use the CSV file as an input to this script
+        3(a). Recommended to run the -DetachPiP $true first to make sure the public ip is not needed
+        3(b). After a window of time run the -DetachPiP $true to delete the object
 .NOTES
     LEGAL DISCLAIMER:
     This Sample Code is provided for the purpose of illustration only and is not intended to be used in a production environment. 
@@ -32,14 +38,13 @@
 .COMPONENT 
     Requires Module Az.Network, Az.Accounts, Az
 .LINK 
-    https://github.com/Azferry/azure-powershell
     https://docs.microsoft.com/en-us/azure/virtual-network/ip-services/remove-public-ip-address-vm#powershell
 .EXAMPLE
     Detach the Public IPs from VMs network interface 
     ./Delete-PublicIPs.ps1 -CSVPath ".\PublicIpReport.csv" -DetachPiP $true
 .EXAMPLE
     Delete all the unattached IPs resource
-    ./Delete-PublicIPs.ps1 -CSVPath ".\PublicIpReport.csv" -DeletePiP $true
+    ./Delete-PublicIPs.ps1 -CSVPath ".\PublicIpReport.csv" -DetachPiP $true
 .EXAMPLE
     Unattach and Delete the public ip attached to VMs network interface
     ./Delete-PublicIPs.ps1 -CSVPath ".\PublicIpReport.csv" -DetachPiP $true -DeletePiP $true
